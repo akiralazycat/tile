@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { HouseBar } from "@/components/house-bar";
 import type { InspectResponse, TileSource } from "@/lib/tile";
 
 type WidgetSize = "small" | "medium" | "large";
@@ -183,7 +184,9 @@ export function TileStudio() {
   const displayItems = source.items.slice(0, size === "large" ? 4 : 3);
 
   return (
-    <main className="studio-shell">
+    <>
+      <HouseBar product="Tile" />
+      <main className="studio-shell">
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Tile home">
           <span className="brand-mark" aria-hidden="true"><span /></span>
@@ -402,6 +405,7 @@ export function TileStudio() {
       </section>
 
       <footer><div className="brand"><span className="brand-mark"><span /></span><span>tile</span></div><p>Make the useful parts of the web glanceable.</p><span>v0.1</span></footer>
-    </main>
+      </main>
+    </>
   );
 }
