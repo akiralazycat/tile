@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { HouseBar } from "@/components/house-bar";
 import type { InspectResponse, TileSource } from "@/lib/tile";
 
 type WidgetSize = "small" | "medium" | "large";
@@ -185,7 +184,6 @@ export function TileStudio() {
 
   return (
     <>
-      <HouseBar product="Tile" />
       <main className="studio-shell">
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Tile home">
