@@ -1,10 +1,14 @@
 import { lookup } from "node:dns/promises";
 import { NextRequest, NextResponse } from "next/server";
 import type { SourceKind, TileItem, TileSource } from "@/lib/tile";
+import { consumeRequestBurst } from "@/lib/request-burst-limit";
 
 export const runtime = "nodejs";
 
 const MAX_BYTES = 2_500_000;
+const MAX_URL_LENGTH = 2_048;
+const INSPECT_BURST_LIMIT = 20;
+const INSPECT_BURST_WINDOW_MS = 60_000;
 const USER_AGENT =
   "Tile/0.1 (+https://github.com/akiralazycat/tile; web-to-widget source inspector)";
 
@@ -400,9 +404,17 @@ async function inspect(input: string) {
 }
 
 export async function GET(request: NextRequest) {
+  const burst = consumeRequestBurst(request, "inspect-url", INSPECT_BURST_LIMIT, INSPECT_BURST_WINDOW_MS);
+  if (!burst.allowed) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests. Try again shortly." },
+      { status: 429, headers: { "Retry-After": String(burst.retryAfterSeconds) } },
+    );
+  }
+
   const input = request.nextUrl.searchParams.get("url")?.trim();
-  if (!input) {
-    return NextResponse.json({ ok: false, error: "Add a URL to inspect." }, { status: 400 });
+  if (!input || input.length > MAX_URL_LENGTH) {
+    return NextResponse.json({ ok: false, error: "Add a valid URL to inspect." }, { status: 400 });
   }
 
   try {
