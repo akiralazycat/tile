@@ -14,6 +14,6 @@ The existing CDN cache still handles repeat requests for identical URLs.
 
 | Item | Status |
 |---|---|
-| Pre-fetch burst guard | pending |
-| Static verification | pending |
+| Pre-fetch burst guard | done | 20 requests / minute / client key per warm instance; URL capped at 2048 chars |
+| Static verification | done | guard runs before DNS and remote fetches |
 | Production verification | pending |
