@@ -20,7 +20,7 @@
 ## Run locally
 
 ```bash
-npm install
+npm install --no-package-lock
 npm run dev
 ```
 
@@ -28,10 +28,14 @@ Then open `http://localhost:3000`.
 
 ## Validation
 
+Use Node.js 22. Build first on a fresh checkout to generate the route types used by the TypeScript check.
+
 ```bash
-npm run typecheck
 npm run build
+npm run typecheck
 ```
+
+For parsing changes, check a representative page or feed and inspect the normalized widget in the UI. Review the [API](#api) and [security notes](#security-notes) when changing request or response handling.
 
 ## API
 
